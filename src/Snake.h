@@ -46,3 +46,4 @@ private:
 	int playerInput();
 	int aiInput();
 };
+
