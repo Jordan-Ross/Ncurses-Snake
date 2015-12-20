@@ -2,40 +2,50 @@
 //Copyright 2015 Jordan Ross
 #include <iostream>
 #include <string>
+#include <string.h>
 #include "Snake.h"
 
-int main() {
-	Snake snake;
+std::string help = 
+"\nSnake game in ncurses \n\
+    -h  help (display this screen) \n\
+    -s	speed (1-9, default 6) \n\
+    -a	use fast AI \n\
+    -A	use perfect AI (slow) \n\
+    -r	prompt for restart \n";
 
-	std::string num;
-	int speed;
-	char choice;
+AI_status useAI = off;
+bool repeat = true;
+int speed = 40;
 
-	bool AI;
-	std::cout << "Use AI? (y/n)";
-	choice = std::cin.get();
-	if (choice == 'y' || choice == 'Y')
-		AI = true;
-	else AI = false;
-
-	speed = 40;
-	while (1) {
-		std::cin.sync();
-		std::cout << "============================================================\n";
-		std::cout << "Enter a speed (1-9, default: " << (100 - speed) / 10 << "): ";
-		num = std::cin.get();
-		if (num[0] == '\n' || isalpha(num[0])) snake.play(speed, AI);
-		else {
-			speed = 100 - std::stoi(num) * 10;
-			snake.play(speed, AI);
-		}
-		std::cin.sync();
-		printf("Play again? (y/n): ");
-		choice = std::cin.get();
-		if (choice == 'y' || choice == 'Y' || choice == '\n')  {
-			continue;
-		}
-		else return 0;
+void parseArgs(int argc, const char** argv) {
+    for (int arg = 1; arg < argc; arg++) {
+        if (!strcmp(argv[arg], "-h")) {
+	    std::cout << help;
+	    //TODO: exit here
 	}
+	else if (!strcmp(argv[arg], "-s")) {
+	    speed = std::stoi(argv[++arg]);
+	    speed = 100 - speed * 10;
+	}		
+	else if (!strcmp(argv[arg], "-a")) {
+	    useAI = fast;
+	}
+	else if (!strcmp(argv[arg], "-A")) {
+	    useAI = slow;
+	}
+	else if (!strcmp(argv[arg], "-r")) {
+	    repeat = false;;
+        }
+    }
+}
+
+int main(int argc, const char** argv) {
+    Snake snake;
+
+    parseArgs(argc, argv);
+
+    while (1) {
+        snake.play(speed, useAI);
+    }
 }
 
