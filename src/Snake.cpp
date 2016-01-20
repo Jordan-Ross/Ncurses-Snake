@@ -67,6 +67,8 @@ bool Snake::move() {
     }
 
     switch (direction) { //Move head in direction
+        case 10:
+            return false; //Stop playing
         case 1:
             (TailvaluesR[length - 1])--; //HeadRow--
             break;
@@ -85,7 +87,7 @@ bool Snake::move() {
         case '-':
         case '|': //Game is lost (Wall)  
         case SNAKE: //Game is lost (Self)
-            return 0; 
+            return false;
         case FOOD: //Food was got
             length = length + 1;
             for (int k = length-1; k > 1; k--) {
@@ -109,7 +111,7 @@ bool Snake::move() {
             break;
     }
     mvaddch(TailvaluesR[length - 1], TailvaluesC[length - 1], SNAKE); //add the new head
-    return 1;
+    return true;
 }
 
 void Snake::makeItem(char item) {
@@ -146,6 +148,9 @@ int Snake::playerInput() { //wasd = nwse = 1234
             break;
         case 'd':
             newdirection = 4;
+            break;
+        case 'q': //quit
+            newdirection = 10;
             break;
         default:
             newdirection = direction;

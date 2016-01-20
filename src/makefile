@@ -1,9 +1,8 @@
 #Makefile for snake 
 CC = g++
 CFLAGS = -std=c++11 -lncurses
-default: snake 
-snake:	Snake.cpp Snake.h Source.cpp
-	$(CC) $(CFLAGS) -o snake.out Snake.cpp Source.cpp
+all: 
+	$(CC) Snake.cpp Source.cpp $(CFLAGS) -o snake.out
 clean:
 	$(RM) snake.out *.o *~
 
